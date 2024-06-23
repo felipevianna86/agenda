@@ -2,6 +2,7 @@ package model;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 
 public class GenericDao {
 	
@@ -20,6 +21,24 @@ public class GenericDao {
 		}catch (Exception e) {
 			System.out.println(e.getMessage());
 			return null;
+		}
+	}
+	
+	public void salvarContato(Agenda agenda) {
+		String create = "INSERT INTO agenda(nome, telefone, email) VALUES (?,?,?)";
+		
+		try {
+			Connection con = conectar();
+			PreparedStatement preparedStatement = con.prepareStatement(create);
+			preparedStatement.setString(1, agenda.getNome());
+			preparedStatement.setString(2, agenda.getTelefone());
+			preparedStatement.setString(3, agenda.getEmail());
+			
+			preparedStatement.executeUpdate();
+			
+			con.close();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
 		}
 	}
 }

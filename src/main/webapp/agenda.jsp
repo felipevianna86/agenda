@@ -8,6 +8,6 @@
 </head>
 <body>
 	<h1>Agenda de Contatos</h1>
-	<a href="">Criar contato</a>
+	<a href="/agenda/novo.html">Criar contato</a>
 </body>
 </html>

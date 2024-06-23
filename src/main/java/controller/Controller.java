@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Agenda;
+import model.GenericDao;
 
 import java.io.IOException;
 
@@ -19,7 +20,6 @@ public class Controller extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String action = request.getServletPath();
-		
 		if(action.equals("/listar")) {
 			listar(request, response);
 		}
@@ -44,6 +44,8 @@ public class Controller extends HttpServlet {
 		novoContato.setTelefone(request.getParameter("telefone"));
 		novoContato.setEmail(request.getParameter("email"));
 		
+		GenericDao dao = new GenericDao();
+		dao.salvarContato(novoContato);
 		
 		response.sendRedirect("agenda.jsp");
 	}
