@@ -10,9 +10,10 @@ import model.Agenda;
 import model.GenericDao;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
-@WebServlet(urlPatterns = {"/listar", "/salvar"})
+@WebServlet(urlPatterns = {"/listar", "/salvar", "/editar", "/atualizar"})
 public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -27,6 +28,16 @@ public class Controller extends HttpServlet {
 		}
 		else if(action.equals("/salvar")) {
 			salvarContato(request, response);
+		}
+		else if(action.equals("/editar")) {
+			try {
+				editarContato(request, response);
+			} catch (ServletException | IOException | SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		else if(action.equals("/atualizar")) {
+			atualizarContato(request, response);
 		}
 		else {
 			listar(request, response);
@@ -55,6 +66,35 @@ public class Controller extends HttpServlet {
 		
 		GenericDao dao = new GenericDao();
 		dao.salvarContato(novoContato);
+		
+		listar(request, response);
+	}
+	
+	protected void editarContato(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+		String idContato = request.getParameter("id");
+		Long id = Long.valueOf(idContato);
+		
+		GenericDao dao = new GenericDao();
+		Agenda contato = dao.findContatoById(id);
+				
+		request.setAttribute("contato", contato);
+		
+		RequestDispatcher rd = request.getRequestDispatcher("editar.jsp");
+		
+		rd.forward(request, response);
+	}
+	
+	protected void atualizarContato(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		
+		Agenda novoContato = new Agenda();
+		
+		novoContato.setId(Long.valueOf(request.getParameter("id")));
+		novoContato.setNome(request.getParameter("nome"));
+		novoContato.setTelefone(request.getParameter("telefone"));
+		novoContato.setEmail(request.getParameter("email"));
+		
+		GenericDao dao = new GenericDao();
+		dao.atualizarContato(novoContato);
 		
 		listar(request, response);
 	}
