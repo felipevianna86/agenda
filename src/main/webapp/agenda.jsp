@@ -29,12 +29,14 @@
 						<td><%= contatos.get(i).getNome()  %></td>
 						<td><%= contatos.get(i).getTelefone()  %></td>
 						<td><%= contatos.get(i).getEmail()  %></td>
-						<td><a href="editar?id=<%= contatos.get(i).getId() %>">Editar</a></td>
+						<td><a href="editar?id=<%= contatos.get(i).getId() %>">Editar</a>
+							<a href="javascript: confirmar(<%= contatos.get(i).getId() %>)">Excluir</a>
+						</td>
 					</tr>
 				<% }  %>
 			<% }  %>
 		</tbody>
 	</table>
-	
+	<script type="text/javascript" src="js/confirmacao.js"></script>
 </body>
 </html>

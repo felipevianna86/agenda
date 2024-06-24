@@ -29,11 +29,11 @@ public class GenericDao {
 	}
 	
 	public void salvarContato(Agenda agenda) {
-		String create = "INSERT INTO agenda(nome, telefone, email) VALUES (?,?,?)";
+		String sql = "INSERT INTO agenda(nome, telefone, email) VALUES (?,?,?)";
 		
 		try {
 			Connection con = conectar();
-			PreparedStatement preparedStatement = con.prepareStatement(create);
+			PreparedStatement preparedStatement = con.prepareStatement(sql);
 			preparedStatement.setString(1, agenda.getNome());
 			preparedStatement.setString(2, agenda.getTelefone());
 			preparedStatement.setString(3, agenda.getEmail());
@@ -48,11 +48,11 @@ public class GenericDao {
 	
 	public List<Agenda> listarContatos(){
 		
-		String read = "SELECT * FROM agenda ORDER BY nome";
+		String sql = "SELECT * FROM agenda ORDER BY nome";
 		
 		try {
 			Connection con = conectar();
-			PreparedStatement preparedStatement = con.prepareStatement(read);
+			PreparedStatement preparedStatement = con.prepareStatement(sql);
 			
 			ResultSet rs = preparedStatement.executeQuery();
 			
@@ -107,15 +107,32 @@ public class GenericDao {
 	}
 	
 	public void atualizarContato(Agenda agenda) {
-		String create = "UPDATE agenda SET nome = ?, telefone = ?, email = ? WHERE id = ?";
+		String sql = "UPDATE agenda SET nome = ?, telefone = ?, email = ? WHERE id = ?";
 		
 		try {
 			Connection con = conectar();
-			PreparedStatement preparedStatement = con.prepareStatement(create);
+			PreparedStatement preparedStatement = con.prepareStatement(sql);
 			preparedStatement.setString(1, agenda.getNome());
 			preparedStatement.setString(2, agenda.getTelefone());
 			preparedStatement.setString(3, agenda.getEmail());
 			preparedStatement.setLong(4, agenda.getId());
+			
+			preparedStatement.executeUpdate();
+			
+			con.close();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	public void removerContato(Long id) {
+		String sql = "DELETE FROM agenda WHERE id = ?";
+		
+		try {
+			Connection con = conectar();
+			PreparedStatement preparedStatement = con.prepareStatement(sql);
+			
+			preparedStatement.setLong(1, id);
 			
 			preparedStatement.executeUpdate();
 			

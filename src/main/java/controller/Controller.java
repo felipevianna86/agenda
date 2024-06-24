@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-@WebServlet(urlPatterns = {"/listar", "/salvar", "/editar", "/atualizar"})
+@WebServlet(urlPatterns = {"/listar", "/salvar", "/editar", "/atualizar", "/remover"})
 public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -38,6 +38,9 @@ public class Controller extends HttpServlet {
 		}
 		else if(action.equals("/atualizar")) {
 			atualizarContato(request, response);
+		}
+		else if(action.equals("/remover")) {
+			removerContato(request, response);
 		}
 		else {
 			listar(request, response);
@@ -95,6 +98,16 @@ public class Controller extends HttpServlet {
 		
 		GenericDao dao = new GenericDao();
 		dao.atualizarContato(novoContato);
+		
+		listar(request, response);
+	}
+	
+	protected void removerContato(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		
+		Long id = Long.valueOf(request.getParameter("id"));
+		System.out.println("ID "+id);
+		GenericDao dao = new GenericDao();
+		dao.removerContato(id);
 		
 		listar(request, response);
 	}
