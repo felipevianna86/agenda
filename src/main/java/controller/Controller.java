@@ -1,5 +1,6 @@
 package controller;
 
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -33,14 +34,18 @@ public class Controller extends HttpServlet {
 				
 	}
 	
-	protected void listar(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	protected void listar(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		GenericDao dao = new GenericDao();
 		List<Agenda> contatos = dao.listarContatos();
 		
-		response.sendRedirect("agenda.jsp");
+		request.setAttribute("contatos", contatos);
+		
+		RequestDispatcher rd = request.getRequestDispatcher("agenda.jsp");
+		
+		rd.forward(request, response);
 	}
 	
-	protected void salvarContato(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	protected void salvarContato(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		
 		Agenda novoContato = new Agenda();
 		
