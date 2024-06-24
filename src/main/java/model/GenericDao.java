@@ -3,6 +3,9 @@ package model;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GenericDao {
 	
@@ -40,5 +43,36 @@ public class GenericDao {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
+	}
+	
+	public List<Agenda> listarContatos(){
+		
+		String read = "SELECT * FROM agenda ORDER BY nome";
+		
+		try {
+			Connection con = conectar();
+			PreparedStatement preparedStatement = con.prepareStatement(read);
+			
+			ResultSet rs = preparedStatement.executeQuery();
+			
+			List<Agenda> contatos = new ArrayList<>();
+			
+			while(rs.next()) {
+				Agenda agenda = new Agenda();
+				agenda.setId(rs.getLong("id"));
+				agenda.setNome(rs.getString("nome"));
+				agenda.setTelefone(rs.getString("telefone"));
+				agenda.setEmail(rs.getString("email"));
+				
+				contatos.add(agenda);
+			}
+			
+			System.out.println("Contatos "+contatos);
+			con.close();
+			return contatos;
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return null;
 	}
 }

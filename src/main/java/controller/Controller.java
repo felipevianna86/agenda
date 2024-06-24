@@ -9,6 +9,7 @@ import model.Agenda;
 import model.GenericDao;
 
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet(urlPatterns = {"/listar", "/salvar"})
 public class Controller extends HttpServlet {
@@ -27,12 +28,15 @@ public class Controller extends HttpServlet {
 			salvarContato(request, response);
 		}
 		else {
-			response.sendRedirect("agenda.jsp");
+			listar(request, response);
 		}
 				
 	}
 	
 	protected void listar(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		GenericDao dao = new GenericDao();
+		List<Agenda> contatos = dao.listarContatos();
+		
 		response.sendRedirect("agenda.jsp");
 	}
 	
@@ -47,7 +51,7 @@ public class Controller extends HttpServlet {
 		GenericDao dao = new GenericDao();
 		dao.salvarContato(novoContato);
 		
-		response.sendRedirect("agenda.jsp");
+		listar(request, response);
 	}
 
 }
